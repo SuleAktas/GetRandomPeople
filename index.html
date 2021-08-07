@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title>List of Random Users</title>
+</head>
+<body>
+    <nav class="navbar navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">List of Random Users</a>
+        <form class="form-inline my-2 my-lg-0">
+            <select class="form-control mr-sm-2" id="selectedvalue" onchange="loadUsers();" class="form-select" aria-label="Default select example">
+                <option value="4" selected>4</option>
+                <option value="25">25</option>
+                <option value="100">100</option>
+        
+        
+               
+              </select>
+            
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+          </form>
+      </nav>
+      <div class="container">
+    <div class="row row-cols-4 row-cols-md-4 g-4" id="users"></div>
+</div>
+    <script>
+        selected_value =document.querySelector('#selectedvalue');
+       
+        //Load Github Users
+        function loadUsers(){
+            var xhr=new XMLHttpRequest();
+            var cikis=selected_value.value;
+            xhr.open('GET','https://randomuser.me/api?results='+cikis, true);
+            
+            
+            xhr.onload = function(){
+                if(this.status == 200)
+                {
+                    var users=JSON.parse(this.responseText);
+                   var output='';
+                
+                   for(var i=0;i<users.results.length;i++){
+                      
+                       output+=
+                       '<div class="col">' +
+                       '<div class="card h-100" style="width: 18rem;">' +
+                        '<img src="'+users.results[i].picture.large+'" class="card-img-top">' +
+                        '<div class="card-body">' +
+                        '<h5 class="card-title">'+users.results[i].name.first+'</h5>'+
+        
+                        '</div>'+
+                        '<ul class="list-group list-group-flush">' +
+                            '<li class="list-group-item">'+users.results[i].name.first+" "+users.results[i].name.last+'</li>' +
+                            '<li class="list-group-item">'+users.results[i].email+'</li>' +
+                            '<li class="list-group-item">'+users.results[i].phone+'</li>' +
+                        '</ul>' +
+                        '</div>'+
+                        '</div>';
+                       
+                   }
+                   document.getElementById('users').innerHTML=output;
+                }
+            }
+            xhr.send();
+        }
+    </script>
+   
+</body>
+</html>
